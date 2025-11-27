@@ -1,0 +1,94 @@
+PROGRAMA TaskFlow_Pro
+
+TIPOS
+REGISTRO Usuario
+Inteiro: id
+Caractere: nome
+Caractere: email
+Caractere: senha_hash
+FIM_REGISTRO
+
+REGISTRO Tarefa
+    Inteiro: id
+    Inteiro: usuario_id
+    Caractere: titulo
+    Caractere: categoria
+    Caractere: prioridade
+    Data: data_vencimento
+    Logico: concluida
+FIM_REGISTRO
+
+
+VARIAVEIS
+Usuario: usuario_logado
+Vetor de Tarefa: lista_tarefas
+Logico: sistema_ativo <- VERDADEIRO
+
+INICIO
+
+ENQUANTO sistema_ativo FAÇA
+    
+    SE usuario_logado É NULO ENTÃO
+        ESCREVA "--- BEM VINDO AO TASKFLOW ---"
+        ESCREVA "1. Login"
+        ESCREVA "2. Cadastro"
+        LEIA opcao
+        
+        SE opcao = 1 ENTÃO
+            CHAMAR FuncaoLogin()
+        SENAO
+            CHAMAR FuncaoCadastro()
+        FIM_SE
+        
+    SENAO
+        // Usuário está logado
+        LIMPAR_TELA
+        ESCREVA "Olá, ", usuario_logado.nome
+        ESCREVA "Frase do dia: VAI CHORAR OU VAI FAZER?"
+        
+        CHAMAR ListarTarefas(usuario_logado.id)
+        
+        ESCREVA "[N]ova Tarefa | [E]ditar | [R]emover | [S]air"
+        LEIA comando
+        
+        ESCOLHA comando
+            CASO 'N':
+                LEIA titulo, categoria, prioridade, data
+                SQL_INSERT("INSERT INTO tasks VALUES ...")
+                
+            CASO 'E':
+                ESCREVA "Qual ID da tarefa?"
+                LEIA id_tarefa
+                LEIA novos_dados
+                SQL_UPDATE("UPDATE tasks SET ... WHERE id = id_tarefa")
+                
+            CASO 'R':
+                ESCREVA "Qual ID remover?"
+                LEIA id_tarefa
+                SQL_DELETE("DELETE FROM tasks WHERE id = id_tarefa")
+                
+            CASO 'S':
+                usuario_logado <- NULO
+        FIM_ESCOLHA
+        
+    FIM_SE
+    
+FIM_ENQUANTO
+
+
+FIM_PROGRAMA
+
+FUNCAO FuncaoLogin()
+LEIA email_input, senha_input
+usuario_banco <- SQL_QUERY("SELECT * FROM users WHERE email = email_input")
+
+SE (VerificarHash(senha_input, usuario_banco.senha_hash)) ENTÃO
+    usuario_logado <- usuario_banco
+    RETORNE VERDADEIRO
+SENAO
+    ESCREVA "Acesso Negado"
+    RETORNE FALSO
+FIM_SE
+
+
+FIM_FUNCAO
