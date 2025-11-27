@@ -1,0 +1,81 @@
+ALGORITMO TaskFlow_Sistema
+
+VARIAVEIS GLOBAIS
+UsuarioAtual: Objeto (ID, Nome, Email)
+ListaTarefas: Lista de Objetos Tarefa
+
+INICIO
+
+// --- Módulo de Autenticação ---
+ENQUANTO (UsuarioAtual É NULO) FAÇA
+    EXIBIR "Tela de Login/Cadastro"
+    
+    SE (Usuario escolheu "Cadastrar") ENTÃO
+        LER Nome, Email, Senha
+        SE (Email já existe no Banco) ENTÃO
+            EXIBIR "Erro: Email em uso"
+        SENAO
+            Criptografar Senha
+            Salvar Novo Usuario no Banco
+            EXIBIR "Sucesso! Faça Login."
+        FIM_SE
+        
+    SENAO SE (Usuario escolheu "Login") ENTÃO
+        LER Email, Senha
+        Buscar Usuario no Banco pelo Email
+        
+        SE (Usuario encontrado E Senha bate com Hash) ENTÃO
+            UsuarioAtual <- Dados do Usuario
+            CarregarDashboard()
+        SENAO
+            EXIBIR "Erro: Credenciais inválidas"
+        FIM_SE
+    FIM_SE
+FIM_ENQUANTO
+
+// --- Módulo Principal (Dashboard) ---
+PROCEDIMENTO CarregarDashboard()
+    Buscar Tarefas do UsuarioAtual no Banco de Dados
+    Calcular Estatísticas (Total, Pendentes, Concluídas)
+    Exibir Frase Motivacional Aleatória
+    Exibir Lista de Tarefas na Tela
+FIM_PROCEDIMENTO
+
+// --- Loop de Eventos do Usuário ---
+ENQUANTO (UsuarioAtual NÃO É NULO) FAÇA
+    LER Acao do Usuario
+    
+    ESCOLHA (Acao)
+        CASO "Adicionar Tarefa":
+            LER Titulo, Categoria, Prioridade, Data
+            Salvar Nova Tarefa no Banco (com ID do UsuarioAtual)
+            Atualizar Lista na Tela
+            
+        CASO "Editar Tarefa":
+            Identificar Tarefa Selecionada
+            LER Novos Dados
+            Atualizar Tarefa no Banco
+            Atualizar Lista na Tela
+            
+        CASO "Concluir/Desmarcar Tarefa":
+            Inverter Status (Booleano) da Tarefa
+            Atualizar no Banco
+            Atualizar Estatísticas
+            
+        CASO "Excluir Tarefa":
+            Remover Tarefa do Banco
+            Remover da Lista Visual
+            
+        CASO "Filtrar":
+            LER TipoFiltro (Hoje, Importante, Todas)
+            Exibir apenas tarefas que correspondem ao filtro
+            
+        CASO "Logout":
+            UsuarioAtual <- NULO
+            Limpar Dados Locais
+            Voltar para Tela de Login
+    FIM_ESCOLHA
+FIM_ENQUANTO
+
+
+FIM
