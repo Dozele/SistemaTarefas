@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="3.0">
+    <attributes>
+        <attribute name="name" value="TaskFlow Logic"/>
+        <attribute name="authors" value="Nathan"/>
+        <attribute name="about" value="Logica do sistema de tarefas"/>
+        <attribute name="saved" value="2024-11-27"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="usuarioLogado" type="Boolean" array="False" size=""/>
+            <assign variable="usuarioLogado" expression="False"/>
+            <declare name="opcao" type="Integer" array="False" size=""/>
+            
+            <while expression="usuarioLogado == False">
+                <output expression="&quot;1. Login  2. Cadastrar  3. Sair&quot;" newline="True"/>
+                <input variable="opcao"/>
+                
+                <if expression="opcao == 1">
+                    <then>
+                        <call expression="RealizarLogin(usuarioLogado)"/>
+                    </then>
+                    <else>
+                        <if expression="opcao == 2">
+                            <then>
+                                <output expression="&quot;Digite Nome, Email e Senha para cadastrar...&quot;" newline="True"/>
+                                <output expression="&quot;Usuario cadastrado!&quot;" newline="True"/>
+                            </then>
+                            <else>
+                                <output expression="&quot;Saindo...&quot;" newline="True"/>
+                                <breakpoint/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </while>
+            
+            <comment text="Area do Dashboard"/>
+            <declare name="sairDashboard" type="Boolean" array="False" size=""/>
+            <assign variable="sairDashboard" expression="False"/>
+            
+            <while expression="sairDashboard == False">
+                <output expression="&quot;--- DASHBOARD ---&quot;" newline="True"/>
+                <output expression="&quot;1. Listar Tarefas&quot;" newline="True"/>
+                <output expression="&quot;2. Adicionar Tarefa&quot;" newline="True"/>
+                <output expression="&quot;3. Logout&quot;" newline="True"/>
+                <input variable="opcao"/>
+                
+                <if expression="opcao == 1">
+                    <then>
+                        <output expression="&quot;Listando tarefas do banco de dados...&quot;" newline="True"/>
+                    </then>
+                    <else>
+                        <if expression="opcao == 2">
+                            <then>
+                                <output expression="&quot;Digite Titulo, Categoria e Data...&quot;" newline="True"/>
+                                <output expression="&quot;Tarefa Salva!&quot;" newline="True"/>
+                            </then>
+                            <else>
+                                <assign variable="sairDashboard" expression="True"/>
+                                <assign variable="usuarioLogado" expression="False"/>
+                            </else>
+                        </if>
+                    </else>
+                </if>
+            </while>
+        </body>
+    </function>
+    
+    <function name="RealizarLogin" type="None" variable="">
+        <parameters>
+            <parameter name="statusLogin" type="Boolean" direction="out"/>
+        </parameters>
+        <body>
+            <declare name="email" type="String" array="False" size=""/>
+            <declare name="senha" type="String" array="False" size=""/>
+            <output expression="&quot;Digite Email:&quot;" newline="True"/>
+            <input variable="email"/>
+            <output expression="&quot;Digite Senha:&quot;" newline="True"/>
+            <input variable="senha"/>
+            
+            <comment text="Simulacao de verificacao no banco"/>
+            <if expression="email == &quot;admin&quot; &amp;&amp; senha == &quot;123&quot;">
+                <then>
+                    <assign variable="statusLogin" expression="True"/>
+                    <output expression="&quot;Login com Sucesso!&quot;" newline="True"/>
+                </then>
+                <else>
+                    <assign variable="statusLogin" expression="False"/>
+                    <output expression="&quot;Credenciais Invalidas&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>
