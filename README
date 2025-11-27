@@ -1,0 +1,117 @@
+🚀 TaskFlow - Sistema de Produtividade Pro
+
+"Resultados, não desculpas."
+
+O TaskFlow é uma aplicação web moderna de gerenciamento de tarefas focada em produtividade "bruta". Com um design Dark Mode elegante, frases motivacionais rústicas e persistência de dados robusta, ele ajuda você a organizar sua vida sem rodeios.
+
+📸 Funcionalidades
+
+Autenticação Completa: Login e Cadastro de usuários com senhas criptografadas.
+
+Dashboard Interativo: Visão geral de tarefas pendentes, concluídas e estatísticas.
+
+CRUD Completo: Criar, Ler, Atualizar (conteúdo e status) e Deletar tarefas.
+
+Design Premium: Interface construída com Tailwind CSS, Glassmorphism e Ícones Phosphor.
+
+Motivação "Bruta": Frases aleatórias para manter o foco (ex: "Vai chorar ou vai fazer?").
+
+Filtros Inteligentes: Visualize tarefas do dia, importantes ou todas.
+
+Backend Robusto: API em Python (Flask) conectada a um banco de dados MySQL.
+
+🛠️ Tecnologias Utilizadas
+
+Frontend
+
+HTML5 & CSS3
+
+Tailwind CSS (via CDN para estilização rápida)
+
+JavaScript (ES6+) (Lógica de interface e consumo de API)
+
+Phosphor Icons & Google Fonts (Plus Jakarta Sans)
+
+Backend
+
+Python 3.x
+
+Flask (Microframework web)
+
+Flask-CORS (Gerenciamento de acesso)
+
+Werkzeug (Segurança e Hash de senhas)
+
+Banco de Dados
+
+MySQL (Persistência relacional)
+
+MySQL Connector (Driver Python)
+
+🚀 Como Rodar o Projeto
+
+Pré-requisitos
+
+Python 3 instalado.
+
+MySQL Server instalado e rodando.
+
+MySQL Workbench (opcional, para gerenciar o DB).
+
+Passo 1: Configurar o Banco de Dados
+
+Execute o script SQL no seu banco de dados para criar a estrutura:
+
+CREATE DATABASE taskflow_db;
+USE taskflow_db;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tasks (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    category VARCHAR(50),
+    priority VARCHAR(20),
+    due_date DATE,
+    completed BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+Passo 2: Configurar o Backend
+
+Instale as dependências:
+
+pip install flask mysql-connector-python flask-cors werkzeug
+
+
+No arquivo main.py, atualize a senha do banco de dados:
+
+db_config = {
+    'user': 'root',
+    'password': 'SUA_SENHA_AQUI',
+    # ...
+}
+
+
+Passo 3: Executar
+
+Rode o servidor Python:
+
+python main.py
+
+
+Acesse no navegador:
+http://127.0.0.1:5000
+
+📝 Licença
+
+Este projeto é de código aberto e destinado a fins educacionais e de produtividade pessoal.
